@@ -1,19 +1,23 @@
-import { Body, Controller, Get, HttpCode, Param, Post } from "@nestjs/common";
+import { Controller, Get, Param } from "@nestjs/common";
 import { UserService } from "./users.service";
-import { CreateUserDto } from "./dto/create-user.dto";
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from "@nestjs/swagger";
+import { UserEntity } from "./entities/users.entity";
 
 @Controller("users")
+@ApiTags("Users")
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get("email/:email")
+  @ApiOperation({ summary: "Selection of a user by their email" })
+  @ApiOkResponse({ type: UserEntity })
+  @ApiParam({ name: "email", description: "Email" })
   findByEmail(@Param("email") email: string) {
     return this.userService.findByEmail(email);
-  }
-
-  @Post()
-  @HttpCode(201)
-  save(@Body() dto: CreateUserDto) {
-    return this.userService.create(dto);
   }
 }

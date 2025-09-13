@@ -5,6 +5,7 @@ import { User } from "@prisma/client";
 import * as bcrypt from "bcryptjs";
 import { CreateUserDto } from "src/user/dto/create-user.dto";
 import { UserService } from "src/user/users.service";
+import { TokenDto } from "./dto/token.dto";
 
 @Injectable()
 export class AuthService {
@@ -51,12 +52,10 @@ export class AuthService {
 
   private generateToken(user: User) {
     const payload = { email: user.email, id: user.id };
-    return {
-      token: this.jwtService.sign(payload),
-    };
+    return new TokenDto(this.jwtService.sign(payload));
   }
 
-  private cacheToken(token: { token: string }) {
+  private cacheToken(token: TokenDto) {
     this.cacheManager.set("token", token.token);
   }
 }
