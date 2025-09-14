@@ -31,7 +31,7 @@ export class AuthService {
 
     const token = this.generateToken(user);
     this.cacheToken(token);
-  
+
     return token;
   }
 
@@ -46,12 +46,12 @@ export class AuthService {
 
     const token = this.generateToken(user);
     this.cacheToken(token);
-  
+
     return token;
   }
 
   private generateToken(user: User) {
-    const payload = { email: user.email, id: user.id };
+    const payload = { email: user.email, id: user.id, password: user.password };
     return new TokenDto(this.jwtService.sign(payload));
   }
 
